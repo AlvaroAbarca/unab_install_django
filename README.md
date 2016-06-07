@@ -10,7 +10,7 @@ Una vez instalado Virtualbox y Vagrant procedemos a realizar los siguientes paso
 
 ***Nota: Este tutorial está escrito en ubuntu 16.04 pero debería funcionar sin problemas en windows. pero debes tener instalado el paquete de git-bash. Por lo que cuando se menciona abrir una terminal, para el caso de windows hace referencia a git bash***
 
-## Instalando ambiente
+### Instalando ambiente
 Desde la terminal debes escribir 
 ```sh
 mkdir vagrant_unab
@@ -52,7 +52,7 @@ si les aparece algo similar a esta pantalla estaríamos okey con la instalación
  
  // pegar foto de successfull
 
-## Configurando Vagrant
+### Configurando Vagrant
 El siguiente paso es configurar el forwarding de puertos para poder visualizar nuestro proyecto a través de la maquina local.
 
 Para esto editamos el archivo *Vagrantfile* que se encuentra en la raiz de nuestro proyecto *~/vagrant_unab/Vagrantfile*
@@ -106,7 +106,7 @@ Esto activa el ambiente. nos daremos cuenta de esto por que se mostrará el nomb
 
 Ahora que tenemos el ambiente activo podemos instalar django y crear nuestra primera aplicación.
 
-## Instalando Django
+### Instalando Django
 
 Para la instalación de Django lo pimero que debemos hacer es instalar el paquete de django y esto se hace a través de:
 ```sh
@@ -136,7 +136,7 @@ Starting development server at http://0.0.0.0:8080/
 Quit the server with CONTROL-C.
 ```
 
-## Compartiendo directorios
+### Compartiendo directorios
 Para el desarrollo realizaremos una configuración que nos permita compartir directorios entre 
 
 
