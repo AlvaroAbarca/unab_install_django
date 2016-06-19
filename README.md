@@ -26,7 +26,7 @@ Para ello descargaremos el box utilizando el programa *wget* ejecutando la sigui
 ```sh
 wget http://phoenix.ewok.cl/vagrant_boxes/vagrant_unab.box
 ```
-Con esto descargamos nuestro box por lo que ahora procedemos a su instalación.
+Con esto descargamos nuestro box por lo que ahora procedemos a su instalación. Este comando solo funciona con linux o mac. En el caso de windows deberás tomar el link y descargarlo a través del navegador.
 
 Como estamos parados en el directorio *~/vagrant_unab* solo basta con ejecutar los siguientes pasos:
 ```sh
