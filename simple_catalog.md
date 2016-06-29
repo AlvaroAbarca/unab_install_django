@@ -116,7 +116,7 @@ INSTALLED_APPS = [
 Luego de este proceso procederemos a programar nuestra aplicación: los pasos a seguir serían programar nuestro modelos, configurar la vistas en el administrador y programar nuestro HTML.
 
 ### Modelos en django
-Una de las características de Django es que nuestro modelo de datos lo debemos escribir en python, asi como la relacion de las entidades. Django provee soporte para relacionar entidades del tipo ***uno es a uno***, ***uno es muchos***, ***muchos es a muchos***. si quieres saber todas las opciones lo puedes revisar en la (documentación oficla)[https://docs.djangoproject.com/en/1.9/ref/models/relations/].
+Una de las características de Django es que nuestro modelo de datos lo debemos escribir en python, asi como la relacion de las entidades. Django provee soporte para relacionar entidades del tipo ***uno es a uno***, ***uno es muchos***, ***muchos es a muchos***. si quieres saber todas las opciones lo puedes revisar en la [documentación oficla](https://docs.djangoproject.com/en/1.9/ref/models/relations/).
 
 Para comenzar con nuestro proyecto, debemos programar nuestro modelo de datos. 
 Esto se realiza desde la app que hemos creado (recordar que se llama catalog). Entonces debemos acceder a la carpeta catalog y editamos el fichero models.py. En este archivo debemos escribir algo similar a lo siguiente:
@@ -213,6 +213,47 @@ Si todo está bien deberíamos ver lo siguiente en el administrador de django:
 Con esto ya tenemos nuestro modelo totalmente auto-administrable (mágia de django!!)
 
 ### URL's y Vistas
+Ahora nos toca comenzar a montar nuestra aplicación. Recordar que el objetivo de la aplicación es poder darle vida al [siguiente HTML ](https://github.com/mcantillana/unab_ecommerce_demo/blob/master/category.html)
+
+Para poder construir nuestra aplicación es necerio indicarle a Django como navegará el usuario por nuestra aplicación. Para esto se utilizan las URL's de Django que nos permiten definir una urls que se mapeará a un metodo de nuestra vista donde podrá renderizar nuestro HTML.
+
+Es necesario entender de mejor forma éste concepto por lo que es necesario que revisen al menos el siguiente [link [1]](http://tutorial.djangogirls.org/es/django_urls/) y para profundizar el siguiente [link [2]] (http://librosweb.es/libro/django_1_0/capitulo_8/incluyendo_otras_urlconfs.html)
+
+Las configuraciones de url se realizan en el archivo urls.py que está en direcorio donde se encuentra el settings.py de nuestro proyecto. Para nuestro proyecto vamos a delegar la resolución de URL a nuestra app y esto lo realizaremos abriendo urls.py y escribiendo lo siguiente:
+
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+from django.conf import settings
+
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^catalog/', include('catalog.urls')),
+]
+```
+
+Solo debemos agregar la línea  ___url(r'', include('catalog.urls')),___ en nuestra lista urlpatterns e importar include. Con este le indicamos a Django que valla a buscar a nuestra app las URL.
+
+Paso seguido es configurar nuestra app para que pueda resolver las URL. Para ello nos vamos a nuestra app (que está en el directorio catalog) y creamos el fichero urls.py y agremos el siguiente contenido:
+
+```python
+from django.conf.urls import include, url
+from . import views
+
+urlpatterns = [
+    url(r'^category/(?P<category_id>\d+)/$', views.category),
+]
+```
+
+Básicamente lo que estamos haciendo es definir un patron a través de una expresión regular que identifique una URL que comience con category/ luego losiga un dígito que lo identificaremos a través del nombre category_id. Este patrón cuando se reconozca en una URL se mapeará al método views.category que está definido en nuestro archivo views.py (que lo revisaremos más adelante).
+
+Con esto ya tenemos configurado nuestra primera URL que deberá ser de la siguiente forma http://127.0.0.1:8000/catalog/category/<category_id> (category_id debe ser reeemplazado por algún id de categoría, pueden probar colocando 1 quedando la URL http://127.0.0.1:8000/catalog/category/1)
+
+Ahora nos queda cargar y conifgurar nuestro HTML.
+
+### Cargando nuestro HTML en views.py
+
 
 ### Thumbnails con sorl-thumnail
-
+//pendiente
