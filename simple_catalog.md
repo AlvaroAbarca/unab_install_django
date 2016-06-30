@@ -252,8 +252,88 @@ Con esto ya tenemos configurado nuestra primera URL que deberá ser de la siguie
 
 Ahora nos queda cargar y conifgurar nuestro HTML.
 
-### Cargando nuestro HTML en views.py
+### Templates & Views
+#### Templates
+Como base para este demo tomaré el siguiente HTML/CSS https://github.com/mcantillana/unab_ecommerce_demo/tree/master que es básicamente una implementación con bootstrap de una sección de categoría.
 
+Una vez descargado los archivos debemos crear el directorio static y templates dentro de nuestra app. En el directorio template debemos dejar nuestro HTML y en static los archivos CSS, JS, fonts y todo lo que es estáticos. Nuestra App debería quedar así:
+
+```sh
+├── catalog
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   ├── models.py
+│   ├── static
+│   │   ├── css
+│   │   │   ├── bootstrap.css
+│   │   │   ├── bootstrap.css.map
+│   │   │   ├── bootstrap.min.css
+│   │   │   ├── bootstrap.min.css.map
+│   │   │   ├── bootstrap-theme.css
+│   │   │   ├── bootstrap-theme.css.map
+│   │   │   ├── bootstrap-theme.min.css
+│   │   │   ├── bootstrap-theme.min.css.map
+│   │   │   ├── justified-nav.css
+│   │   │   └── style.css
+│   │   ├── fonts
+│   │   │   ├── glyphicons-halflings-regular.eot
+│   │   │   ├── glyphicons-halflings-regular.svg
+│   │   │   ├── glyphicons-halflings-regular.ttf
+│   │   │   ├── glyphicons-halflings-regular.woff
+│   │   │   └── glyphicons-halflings-regular.woff2
+│   │   ├── image
+│   │   │   └── favicon.ico
+│   │   └── js
+│   │       ├── bootstrap.js
+│   │       ├── bootstrap.min.js
+│   │       ├── jquery.min.js
+│   │       └── npm.js
+│   ├── templates
+│   │   ├── category.html
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+
+```
+
+Una vez realizado esto debemos configurar nuestro HTML para que las rutas de las llamadas al css y javascript sean reconocidad por Django. Para esto vamos a utilizar el template tag static. Por lo que donde diga:
+
+```html
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/justified-nav.css" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="css/style.css" rel="stylesheet">
+```
+
+demos cambiarlo por 
+```html5
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/justified-nav.css' %}" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+```
+
+Básicamente debemos dejar nuestra ruta relativa envuelta en el template tag % static 'css/style.css' %}
+
+Además de ésto demos indicarle a la plantilla de Django que estamos usando el template Tag. Esto lo hacemo con :
+
+```python
+{% load staticfiles %}
+```
+
+Esto lo colocamos al principio de nuestro archivo html. Teniendo esto ya podemos escribir nuestra lógica en la vista para que renderice nuestro HTML.
+
+#### Views
 
 ### Thumbnails con sorl-thumnail
 //pendiente
