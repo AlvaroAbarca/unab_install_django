@@ -334,6 +334,245 @@ Además de ésto demos indicarle a la plantilla de Django que estamos usando el 
 Esto lo colocamos al principio de nuestro archivo html. Teniendo esto ya podemos escribir nuestra lógica en la vista para que renderice nuestro HTML.
 
 #### Views
+Como ya tenemos configurado nuestros HTML, solo nos falta renderizarlo a través de Django. Para ésto vamos a implementar el método que mapeamos en el archivo urls.py de nuestra app llamado category. Para realizar este proceso necesitamos editar el fichero views.py y escribir lo siguiente:
+
+```python
+from django.shortcuts import render
+
+from catalog.models import Category, Product
+
+def category(request,category_id):
+
+    products = Product.objects.filter(category__id=category_id)
+
+    return render(request, 'category.html', {'products':products})
+
+```
+
+Lo que estamos haciendo acá es definir un método category. Todo método que procesa una URL debe recibir al menos un parámetro que es el request. En nuestro caso debemos pasar otro parámetro al método category que es el category_id que definimos en la url.
+
+En el método se definen dos cosas muy puntuales. Lo primero es rescatar los productos filtrando por la categoría y esto se hace con:
+
+```python
+    products = Product.objects.filter(category__id=category_id)
+```
+
+Estos productos, que son un objeto, se pasaran a la vista para que posteriormente sean pintados.
+
+Para pasar los productos y renderizar el html utilizaremos el shorcuts render de Django. Esto lo hacemo con:
+
+```python
+    return render(request, 'category.html', {'products':products})
+```
+
+Ahora solo nos queda pintar los productos en nuestro HTML.
+
+Para esto es necesario comprender que los elementos dentro de la vista serán un objeto que en este caso lo definimos con el nombre **products**. Las vistas en Django utilizan un méta lenguaje para renderizar y agregar lógica al pintado. Para conocer más sobre él puedes vistitar la [documentación oficial](https://docs.djangoproject.com/en/1.9/ref/templates/language/)
+
+En nuestro caso lo que retorna el queryset que construimos con el uso de filter es una lista de python con los productos. Por lo tanto debemos iterar esta lista y pintar el nombre, precio y link para cada producto. Esto lo hacemos de la siguiente manera.
+
+```html
+{% for product in products %}
+<div class="col-sm-4">
+    <div class="col-item">
+        <div class="photo">
+                <img src="http://lorempixel.com/" width="350}" height="260" class="img-responsive" alt="{{product.name}}" >                          
+        </div>
+        <div class="info">
+            <div class="row">
+                <div class="price col-md-6">
+                    <h5>{{product.name}}</h5>
+                    <h5 class="price-text-color">{{product.price}}</h5>
+                </div>
+                <div class="rating hidden-sm col-md-6">
+                    <i class="price-text-color fa fa-star"></i>
+                    <i class="price-text-color fa fa-star"></i>
+                    <i class="price-text-color fa fa-star"></i>
+                    <i class="price-text-color fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+            </div>
+            <div class="separator clear-left">
+                <p class="btn-add">
+                    <i class="fa fa-shopping-cart"></i><a href="#" class="idden-sm">Agregar</a></p>
+                <p class="btn-details">
+                    <i class="fa fa-list"></i><a href="#" class="hidden-sm">Cotizar</a></p>
+            </div>
+            <div class="clearfix">     </div>
+        </div>
+    </div>
+</div>  
+{% endfor %} 
+``` 
+```
+
+Si te fijas es muy simple el sistema de plantillas de Django pero muy potente. En la misma plantilla hay un templatetag que usaremos para las imágenes pero lo explicaremos la instalación y el uso más adelante
+
+Hasta hora nuestra plantilla debería quedar así *(category.html)*:
+
+```html
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{%static 'image/favicon.ico' %}">
+
+    <title>{% block title %}E.Commerce{% endblock title %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/justified-nav.css' %}" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- The justified navigation menu is meant for single line per list item.
+           Multiple lines will require custom code not provided by Bootstrap. -->
+      <div class="masthead">
+        <h3 class="text-muted">Project name</h3>
+        <nav>
+          <ul class="nav nav-justified">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Chaquetas</a></li>
+            <li><a href="#">Pantalones</a></li>
+            <li><a href="#">Zapatos</a></li>
+            <li><a href="#">Zapatillas</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="container">
+       
+
+
+       <div class="row">
+         <div class="col-md-12">
+           <h1>Chaquetas de pluma</h1>
+         </div>
+       </div>
+       <div class="row">
+         <div class="col-md-12">
+           <ol class="breadcrumb">
+             <li><a href="#">Home</a></li>
+             <li><a href="#">Chaquetas</a></li>
+             <li class="active">Chaquetas de pluma</li>
+           </ol>
+         </div>
+       </div>
+       <!-- Example row of columns -->
+       <div class="row">
+         <div class="col-md-3">
+           <div class="panel panel-default">
+             <div class="panel-heading">Filtros</div>
+             <div class="panel-body">
+               <div class="checkbox">
+                 <label>
+                   <input type="checkbox" value="">
+                   Hombre
+                 </label>
+                 <br>
+                 <label>
+                   <input type="checkbox" value="">
+                   Mujer
+                 </label>
+                 <br>             
+                 <label>
+                   <input type="checkbox" value="">
+                   Niños
+                 </label>
+                 <br>
+                 <label>
+                   <input type="checkbox" value="">
+                   Niñas
+                 </label>
+               </div>
+               <a href="#" class="btn btn-default pull-right">Filtrar</a>
+             </div>
+           </div>
+
+         </div>
+         <div class="col-md-9">
+             <div class="row">
+               {% for product in products %}
+               <div class="col-sm-4">
+                   <div class="col-item">
+                   <div class="photo">
+                      <img src="http://lorempixel.com/" width="350}" height="260" class="img-responsive" alt="{{product.name}}" >                          
+                   </div>
+                       <div class="info">
+                           <div class="row">
+                               <div class="price col-md-6">
+                                   <h5>{{product.name}}</h5>
+                                   <h5 class="price-text-color">{{product.price}}</h5>
+                               </div>
+                               <div class="rating hidden-sm col-md-6">
+                                   <i class="price-text-color fa fa-star"></i>
+                                   <i class="price-text-color fa fa-star"></i>
+                                   <i class="price-text-color fa fa-star"></i>
+                                   <i class="price-text-color fa fa-star"></i>
+                                   <i class="fa fa-star"></i>
+                               </div>
+                           </div>
+                           <div class="separator clear-left">
+                               <p class="btn-add">
+                                   <i class="fa fa-shopping-cart"></i><a href="#" class="hidden-sm">Agregar</a></p>
+                               <p class="btn-details">
+                                   <i class="fa fa-list"></i><a href="#" class="hidden-sm">Cotizar</a></p>
+                           </div>
+                           <div class="clearfix">     </div>
+                       </div>
+                   </div>
+               </div>  
+               {% endfor %} 
+             </div>
+
+         </div>
+       </div>
+
+    </div>
+    <div class="container">
+      <!-- Site footer -->
+      <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+  </body>
+</html>
+
+
+```
+
+Con esta ya podríamos navegar nuestro catálogo.
+
 
 ### Thumbnails con sorl-thumnail
 //pendiente
