@@ -403,7 +403,6 @@ En nuestro caso lo que retorna el queryset que construimos con el uso de filter 
     </div>
 </div>  
 {% endfor %} 
-``` 
 ```
 
 Si te fijas es muy simple el sistema de plantillas de Django pero muy potente. En la misma plantilla hay un templatetag que usaremos para las imágenes pero lo explicaremos la instalación y el uso más adelante
